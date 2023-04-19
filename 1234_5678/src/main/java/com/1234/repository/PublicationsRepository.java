@@ -1,21 +1,38 @@
-·       Ability to access the sub screens like edit, view and download.·       Ability to download the branches as format of .csv file.·       User able to find the sub functionalities when he clicks publications functionality.·       User able to access the sub functionalities like edit, view and download.·       User name should not be empty; username should be unique.·       In days at least one day of the week must be selected over the day option.·       The Publisher field should not be empty.·       Clicking on Download Data then it will allow user to view the results in Excel format.·       User should be allows to add/edit publication also user must have to enter the data in the fields of Name.·       If publication is active User can select Active check box.·       User should have the option of filtering the data using the drop down menu.·       Publisher - This drop down menu will allowing User to select the publisher User wish to add/edit.·       Day - This drop down menu will allowing User to select the Day User wish to add/edit.·       The Submit and Reset buttons are given on this screen.·       Once user click on Submit button it will add/edit the publication and or click on Reset button to reset the selections to the last search.
+·       User should be allowed to view the data in Excel format.·       User should be allowed to filter the data using the drop down menu.·       User should be allowed to add/edit publication.·       User name should not be empty; username should be unique.
 
+@Repository
 package com.1234.repository;
+
+import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import com.1234.model.Publications;
+import com.1234.entity.Publications;
 
 public interface PublicationsRepository extends JpaRepository<Publications, Long> {
-	
-	@Query("SELECT p FROM Publications p WHERE p.name = ?1")
-	Publications findByName(String name);
-	
-	@Query("SELECT p FROM Publications p WHERE p.publisher = ?1")
-	Publications findByPublisher(String publisher);
-	
-	@Query("SELECT p FROM Publications p WHERE p.day = ?1")
-	Publications findByDay(String day);
 
+  List<Publications> findByName(String name);
+
+  List<Publications> findByPublisher(String publisher);
+
+  List<Publications> findByDay(String day);
+
+  @Query("SELECT p FROM Publications p WHERE p.name = :name AND p.publisher = :publisher AND p.day = :day")
+  List<Publications> findByNameAndPublisherAndDay(String name, String publisher, String day);
+
+  @Query("SELECT p FROM Publications p WHERE p.active = true")
+  List<Publications> findAllActivePublications();
+  
+  @Query("SELECT p FROM Publications p WHERE p.active = false")
+  List<Publications> findAllInActivePublications();
+  
+  @Query("SELECT p FROM Publications p WHERE p.name = :name AND p.active = true")
+  List<Publications> findActivePublicationsByName(String name);
+  
+  @Query("SELECT p FROM Publications p WHERE p.name = :name AND p.publisher = :publisher AND p.active = true")
+  List<Publications> findActivePublicationsByNameAndPublisher(String name, String publisher);
+  
+  @Query("SELECT p FROM Publications p WHERE p.name = :name AND p.day = :day AND p.active = true")
+  List<Publications> findActivePublicationsByNameAndDay(String name, String day);
 }
