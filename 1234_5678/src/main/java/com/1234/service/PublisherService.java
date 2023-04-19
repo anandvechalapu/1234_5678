@@ -5,47 +5,46 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.1234.model.Publisher;
 import com.1234.repository.PublisherRepository;
+import com.1234.model.Publisher;
 
 @Service
 public class PublisherService {
-
+ 
     @Autowired
     private PublisherRepository publisherRepository;
-
-    // Get a list of all publishers
-    public List<Publisher> getAllPublishers() {
-        return publisherRepository.findAllPublishers();
+    
+    public Publisher findByName(String name) {
+        return publisherRepository.findByName(name);
     }
-
-    // Add a new publisher
-    public void addPublisher(Publisher publisher) {
-        publisherRepository.addPublisher(publisher);
+    
+    public Publisher findByActive(boolean active) {
+        return publisherRepository.findByActive(active);
     }
-
-    // Edit an existing publisher
-    public void editPublisher(Publisher publisher) {
-        publisherRepository.editPublisher(publisher);
+    
+    public List<Publisher> findAllByOrderByNameAsc() {
+        return publisherRepository.findAllByOrderByNameAsc();
     }
-
-    // Download data as a csv file
-    public List<Object[]> downloadPublishersAsCsv() {
-        return publisherRepository.downloadPublishersAsCsv();
+    
+    public void downloadDataAsCsvFormat(){
+        publisherRepository.downloadDataAsCsvFormat();
     }
-
-    // Find a publisher by name
-    public Publisher findPublisherByName(String name) {
-        return publisherRepository.findPublisherByName(name);
+    
+    public void addOrEditPublisher(Publisher publisher) {
+        publisherRepository.addOrEditPublisher(publisher);
     }
-
-    // Check if a publisher name is unique
-    public int checkIfPublisherNameUnique(String name) {
-        return publisherRepository.checkIfPublisherNameUnique(name);
+    
+    public void resetSelectionToLastSearch(Publisher publisher) {
+        publisherRepository.resetSelectionToLastSearch(publisher);
     }
-
-    // Get a list of active publishers
-    public List<Publisher> getActivePublishers() {
-        return publisherRepository.findActivePublishers();
+    
+    public boolean validatePublisher(Publisher publisher) {
+        if (publisher.getName() == null || publisher.getName().isEmpty()) {
+            return false;
+        }
+        if (publisher.getActive() == null) {
+            return false;
+        }
+        return true;
     }
 }
