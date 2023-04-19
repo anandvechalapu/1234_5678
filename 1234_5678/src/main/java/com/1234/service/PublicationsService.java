@@ -1,94 +1,74 @@
+@Service
 package com.1234.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.1234.model.Publications;
+import com.1234.entity.Publications;
 import com.1234.repository.PublicationsRepository;
 
 @Service
 public class PublicationsService {
 
 	@Autowired
-	private PublicationsRepository repository;
+	private PublicationsRepository publicationsRepository;
 	
-	public List<Publications> findAll() {
-		return repository.findAll();
+	public List<Publications> getPublicationsByName(String name) {
+		return publicationsRepository.findByName(name);
 	}
 	
-	public Optional<Publications> findById(Long id) {
-		return repository.findById(id);
+	public List<Publications> getPublicationsByPublisher(String publisher) {
+		return publicationsRepository.findByPublisher(publisher);
 	}
 	
-	public Publications findByName(String name) {
-		return repository.findByName(name);
-	}	
-	
-	public Publications findByPublisher(String publisher) {
-		return repository.findByPublisher(publisher);
+	public List<Publications> getPublicationsByDay(String day) {
+		return publicationsRepository.findByDay(day);
 	}
 	
-	public Publications findByDay(String day) {
-		return repository.findByDay(day);
+	public List<Publications> getPublicationsByNameAndPublisherAndDay(String name, String publisher, String day) {
+		return publicationsRepository.findByNameAndPublisherAndDay(name, publisher, day);
 	}
 	
-	public Publications save(Publications publication) {
-		return repository.save(publication);
+	public List<Publications> getAllActivePublications() {
+		return publicationsRepository.findAllActivePublications();
 	}
 	
-	public void deleteById(Long id) {
-		repository.deleteById(id);
+	public List<Publications> getAllInActivePublications() {
+		return publicationsRepository.findAllInActivePublications();
 	}
 	
-	public void deleteAll() {
-		repository.deleteAll();
+	public List<Publications> getActivePublicationsByName(String name) {
+		return publicationsRepository.findActivePublicationsByName(name);
 	}
 	
-	public void downloadCsv(){
-		// code to download csv file
+	public List<Publications> getActivePublicationsByNameAndPublisher(String name, String publisher) {
+		return publicationsRepository.findActivePublicationsByNameAndPublisher(name, publisher);
 	}
 	
-	public void editPublication(Publications publication){
-		// code to edit publication
+	public List<Publications> getActivePublicationsByNameAndDay(String name, String day) {
+		return publicationsRepository.findActivePublicationsByNameAndDay(name, day);
 	}
 	
-	public void viewPublication(Publications publication){
-		// code to view publication
+	public void addPublication(Publications publication) {
+		if (publication.getName() == null || publication.getName().isEmpty()) {
+			throw new IllegalArgumentException("Publication name cannot be empty");
+		}
+		if (publicationsRepository.existsByName(publication.getName())) {
+			throw new IllegalArgumentException("Publication with same name already exists");
+		}
+		publicationsRepository.save(publication);
 	}
 	
-	public void checkUsername(String username){
-		// code to check username
+	public void editPublication(Publications publication) {
+		if (publication.getName() == null || publication.getName().isEmpty()) {
+			throw new IllegalArgumentException("Publication name cannot be empty");
+		}
+		if (publicationsRepository.existsByName(publication.getName())) {
+			throw new IllegalArgumentException("Publication with same name already exists");
+		}
+		publicationsRepository.save(publication);
 	}
-	
-	public void checkDay(String day){
-		// code to check day
-	}
-	
-	public void checkPublisher(String publisher){
-		// code to check publisher
-	}
-	
-	public void downloadData(){
-		// code to download data in Excel format
-	}
-	
-	public void addPublication(Publications publication){
-		// code to add publication
-	}
-	
-	public void filterData(){
-		// code to filter data
-	}
-	
-	public void submitPublication(){
-		// code to submit publication
-	}
-	
-	public void resetPublication(){
-		// code to reset publication
-	}
-	
+
 }
